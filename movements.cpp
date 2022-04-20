@@ -330,29 +330,23 @@ int rightup(int row,int col)
 void knight(int row,int col)
 {   
     std::cout<<"upleft= "<<upleft(row,col)<<" "<<row-2<<col-1;
-    if(is_enemy(row,col,row-2,col-1)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+    
+        std::cout<<(is_enemy(row,col,row-2,col-1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"upright= "<<upright(row,col)<<" "<<row-2<<col+1;
-    if(is_enemy(row,col,row-2,col+1)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+        std::cout<<(is_enemy(row,col,row-2,col+1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"downleft= "<<downleft(row,col)<<" "<<row+2<<col-1;
-    if(is_enemy(row,col,row+2,col-1)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+        std::cout<<(is_enemy(row,col,row+2,col-1)==1?"<= kill ":" ")<<std::endl;
+
     std::cout<<"downright= "<<downright(row,col)<<" "<<row+2<<col+1;
-    if(is_enemy(row,col,row+2,col+1)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+        std::cout<<(is_enemy(row,col,row+2,col+1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"leftup= "<<leftup(row,col)<<" "<<row-1<<col-2;
-    if(is_enemy(row,col,row-1,col-2)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+        std::cout<<(is_enemy(row,col,row-1,col-2)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"leftdown= "<<leftdown(row,col)<<" "<<row+1<<col-2;
-    if(is_enemy(row,col,row+1,col-2)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+        std::cout<<(is_enemy(row,col,row+1,col-2)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"rightup = "<<rightup(row,col)<<" "<<row-1<<col+2;
-    if(is_enemy(row,col,row-1,col+2)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+        std::cout<<(is_enemy(row,col,row-1,col+2)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"right down= "<<rightdown(row,col)<<" "<<row+1<<col+2;
-    if(is_enemy(row,col,row+1,col+2)==1)
-        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+        std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;
 }
 
 int main()
