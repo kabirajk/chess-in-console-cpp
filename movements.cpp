@@ -15,14 +15,14 @@ std::vector<string>MOVES;
 // { ' ',  'K',  'b',  'q',  'k',  'b',  'n',  'K' },//black 7
 // };
 // //7,4
-int board [8][9]=
+int board [8][8]=
 { 
 { 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' },//white 0
 { 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P' },//white 1
 { ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//space//32 2
-{ ' ',  ' ',  ' ',  ' ',  'n',  ' ',  ' ',  ' ' },// 3
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },// 3
 { ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//4
-{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  'P',  ' ' },//5
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//5
 { 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p' },//black 6
 { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' },//black 7
 };
@@ -40,7 +40,7 @@ int iswhite(int row,int col)
 }
 
 int is_enemy(int crow,int ccol,int drow,int dcol)
-{   
+{   cout<<"\n"<<drow<<dcol<<"\n";
     if(drow>7||dcol>7||dcol<0||drow<0) return 0;
     if(iswhite(crow,ccol))
         {   if(iswhite(crow,ccol) && iswhite(drow,dcol)&&board[drow][dcol]!=32)    return 2;//friends
@@ -48,7 +48,7 @@ int is_enemy(int crow,int ccol,int drow,int dcol)
             else return 1;//it enemy because one is enemy
         }
     else if(!iswhite(crow,ccol))
-        {   
+        {   //std::cout<<crow<<" "<<ccol<<" "<<drow<<" "<<dcol<<"||"<<(board[drow][dcol]==32);
             if(! iswhite(crow,ccol) && ! iswhite(drow,dcol) && board[drow][dcol]!=32)    return 2;//friends
             else if(board[drow][dcol]==32 ) return 0;//space
             else return 1;//it enemy because one is enemy
@@ -94,6 +94,7 @@ int bottomright(int r,int c)
 }
 int bottomleft(int r,int c)
 {
+
     if((r+1)<=7&&(c-1)>=0) return 1;
     else return 0;
 }
@@ -124,6 +125,48 @@ void king(int row ,int col)//check king movemensts//check to cordinates
      indication=is_enemy(row,col,row+1,col-1);
         if (indication!=2)
             cout<<"bottomleft ="<<bottomleft(row,col)<<row+1<<col-1<<(indication==1 ?" <=kill " :"")<<endl;
+// vecor push
+if(top(row,col) == 1 &&is_enemy(row,col,row-1,col)!=2)
+        MOVES.push_back(number_to_string(row-1,col));
+if(bottom(row,col) == 1&& is_enemy(row,col,row+1,col)!=2)
+        MOVES.push_back(number_to_string(row+1,col));
+if(left(row,col) == 1&& is_enemy(row,col,row,col-1) !=2)
+        MOVES.push_back(number_to_string(row,col-1));
+if(right(row,col) == 1&& is_enemy(row,col,row,col+1) !=2)
+        MOVES.push_back(number_to_string(row,col+1));
+if(topright(row,col) == 1 && is_enemy(row,col,row-1,col+1) !=2)
+        MOVES.push_back(number_to_string(row-1,col+1));
+if(topleft(row,col) == 1 && is_enemy(row,col,row-1,col-1)!=2)
+        MOVES.push_back(number_to_string(row-1,col-1));
+if(bottomright(row,col) == 1&& is_enemy(row,col,row+1,col+1)!=2)
+        MOVES.push_back(number_to_string(row+1,col+1));
+if(bottomleft(row,col) == 1&&is_enemy(row,col,row+1,col-1) !=2)
+        MOVES.push_back(number_to_string(row+1,col-1));
+
+}
+namespace line
+{
+    int top(int r,int c)//-- decrease
+{   
+    if(((r)>=0)&&(c>=0 && c<=7)) return 1;
+    else return 0;
+
+}
+int bottom(int r,int c)
+{
+    if(((r)<=7)&&(c>=0 && c<=7)) return 1;
+    else return 0;
+}
+int left(int r,int c)
+{
+    if((c)>=0 &&(r>=0 )) return 1;
+    else return 0;
+}
+int right(int r,int c)
+{
+    if((c)<=7 && r<=7) return 1;
+    else return 0;
+}
 }
 
 void horizontal(int row,int col)
@@ -133,7 +176,9 @@ void horizontal(int row,int col)
         int indication=is_enemy(row,col,row,abs(col-move));
         if(indication==2)   break;
         if(col-move >-1)
-        cout<<"left ="<<left(row,(abs(col-move)))<<" "<<row<<abs(col-move);
+        {cout<<"left ="<<line::left(row,(abs(col-move)))<<" "<<row<<abs(col-move);
+        if(line::left(row,(abs(col-move))) == 1&& is_enemy(row,col,row,abs(col-move)) !=2)
+        MOVES.push_back(number_to_string(row,abs(col-move)));}
             if (indication==1)
                 { std::cout<<" <=kill "; break;}
              
@@ -147,8 +192,10 @@ void horizontal(int row,int col)
         if(indication==2) break;
         
         if(col+move<8)
-        cout<<"right ="<<right(row,move+col)<<" "<<row<<col+move;//<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
+        {cout<<"right ="<<line::right(row,move+col)<<" "<<row<<col+move;//<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
         //if kill break the loop
+        if(line::right(row,move+col) == 1&& is_enemy(row,col,row,col+move) !=2)
+        MOVES.push_back(number_to_string(row,move+col));}
         if (indication==1)
                 { std::cout<<" <=kill "; break;}
             
@@ -161,9 +208,12 @@ void vertical(int row,int col)
     while(1)//verticaltop
     {   int indication=is_enemy(row,col,abs(row-move),col);
         if(indication==2) break;
-        if(row-move>-1)
-        cout<<"top ="<<top(abs((row-move)),col)<<" "<<abs((row-move))<<col;//<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
-
+        if(row-move>=0)
+        {cout<<"top ="<<line::top(abs(row-move),col)<<" "<<abs((row-move))<<col;//<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
+        if(line::top(abs(row-move),col) == 1 &&is_enemy(row,col,abs(row-move),col)!=2)
+        MOVES.push_back(number_to_string(abs(row-move),col));
+        }
+        else break;
         if (indication==1)
             { std::cout<<" <=kill "; break;}
              
@@ -176,8 +226,12 @@ void vertical(int row,int col)
     {   int indication=is_enemy(row,col,row+move,col);
             if(indication==2) break;
         if(row+move<8)
-            cout<<"bottom ="<<bottom(row+move,col)<<" "<<row+move<<col;//<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
-        
+          { cout<<"bottom ="<<line::bottom(row+move,col)<<" "<<row+move<<col;//<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
+            if(line::bottom(row+move,col) == 1&& is_enemy(row,col,row+move,col)!=2)
+        MOVES.push_back(number_to_string(row+move,col));
+        }
+        else break;
+
         if (indication==1)
             { std::cout<<" <=kill "; break;}
              
@@ -188,35 +242,41 @@ void vertical(int row,int col)
 
 
 void rook(int row , int col)//rookie
-{   /*
-    int move=1;
-    while(1)//vertical
-    {
-        if(row-move>-1)
-        cout<<"top ="<<top(abs((row-move)),col)<<" "<<abs((row-move))<<col<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
-        if(row+move<8)
-            cout<<"bottom ="<<bottom(row+move,col)<<" "<<row+move<<col<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
-        move++;
-        if (move>7) break;
-    }*/
+{   
     
     horizontal(row,col);
     cout<<endl;
     vertical(row,col);
-    /*
-    move=1;
-    while(1)//horizontal
-    {
-       
-        if(col-move >-1)
-        cout<<"left ="<<left(row,(abs(col-move)))<<" "<<row<<abs(col-move)<<(is_enemy(row,col,row,abs(col-move))?" <=kill " :" ");
-        if(col+move<8)
-        cout<<"right ="<<right(row,move+col)<<" "<<row<<col+move<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
-        move++;
-        if (move>7) break;
-    }
-    */
+
 }
+
+namespace diag
+{
+    int topright(int r,int c)
+{
+    if((r)>=0 && (c)<=7) return 1;
+    else return 0;
+}
+int topleft(int r,int c)
+{
+    if( (r)>=0 && (c>=0)) return 1;
+    else return 0;
+}
+
+int bottomright(int r,int c)
+{
+    if((r)<=7&&(c)<=7) return 1;
+    else return 0;
+}
+int bottomleft(int r,int c)
+{
+
+    if((r)<=7&&(c)>=-1) return 1;
+    else return 0;
+}
+} 
+
+
 
 void rightdiag(int row,int col)//"\"
 {
@@ -226,7 +286,12 @@ void rightdiag(int row,int col)//"\"
         if(indication==2) break;
        
     if(col-move >=0 && row-move>=0)
-        cout<<"bottomleft ="<<bottomleft(abs(row-move),(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<(is_enemy(row,col,abs(row-move),abs(col-move))?" <=kill " :" ");
+        {cout<<"bottomleft ="<<diag::bottomleft(abs(row-move)-1,(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<" ";
+        if(diag::bottomleft(abs(row-move),abs(col-move)) == 1&&is_enemy(row,col,abs(row-move),abs(col-move)) !=2)
+        MOVES.push_back(number_to_string(abs(row-move),abs(col-move)));
+        }
+    else break;
+        
         if (indication==1)
             { std::cout<<" <=kill "; break;}
         move++;
@@ -238,7 +303,11 @@ void rightdiag(int row,int col)//"\"
         int indication=is_enemy(row,col,row+move,col+move);
         if(indication==2) break;
     if(col+move<=7 && row+move<=7) 
-        cout<<"topright ="<<topright(row+move,move+col)<<" "<<row+move<<col+move<<(is_enemy(row,col,row+move,col+move)?" <=kill " :" ");
+    {    cout<<"topright ="<<diag::topright(row+move,move+col)<<" "<<row+move<<col+move<<" ";
+        if(diag::topright(row+move,move+col) == 1 && is_enemy(row,col,row+move,col+move) !=2)
+        MOVES.push_back(number_to_string(row+move,col+move));
+        }
+    else break;
        if (indication==1)
             { std::cout<<" <=kill "; break;}
         move++;
@@ -253,7 +322,11 @@ void leftdiag(int row,int col)//"/"
         if(indication==2) break;
        
     if(col+move <=7 && row-move>=0)
-        cout<<"bottomright ="<<bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<(is_enemy(row,col,abs(row-move),abs(col+move))?" <=kill " :" ");
+       { cout<<"bottomright ="<<diag::bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<" ";
+        if(diag::bottomright(abs(row-move),(abs(col+move))) == 1 && is_enemy(row,col,abs(row-move),abs(col+move))!=2)
+        MOVES.push_back(number_to_string(abs(row-move),abs(col+move)));
+        }
+    else break;
         if (indication==1)
             { std::cout<<" <=kill "; break;}
         move++;
@@ -265,7 +338,11 @@ void leftdiag(int row,int col)//"/"
         int indication=is_enemy(row,col,row+move,abs(col-move));
         if(indication==2) break;
     if(col-move>=0 && row+move<=7) 
-        cout<<"topleft ="<<topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<(is_enemy(row,col,row+move,abs(col-move))?" <=kill " :" ");
+       { cout<<"topleft ="<<diag::topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<" ";
+       if(diag::topleft(row+move,abs(move-col)) == 1 && is_enemy(row,col,row+move,abs(col-move))!=2)
+        MOVES.push_back(number_to_string(row+move,abs(col-move)));
+       }
+    else break;
         if (indication==1)
             { std::cout<<" <=kill "; break;}
         move++;
@@ -479,7 +556,7 @@ void cointype(int row,int col)
     char coin=board[row][col];
     if(coin=='K' || coin =='k')
         king(row,col);
-    else if(coin=='Q' || coin =='Q')
+    else if(coin=='Q' || coin =='q')
         queen(row,col);
     else if(coin=='B' || coin =='b')
         bishop(row,col);
@@ -487,10 +564,10 @@ void cointype(int row,int col)
         knight(row,col);
     else if(coin=='R' || coin =='r')
         rook(row,col);
-    if(coin=='P' || coin =='p')
+    else if(coin=='P' || coin =='p')
         pawn(row,col);
     else
-        std::cout<<"invalid input";
+        std::cout<<"invalid input"<<board[row][col];
 }
 
 int main()
@@ -499,13 +576,28 @@ int main()
     // for(int i=0;i<MOVES.size();i++)
     //     std::cout<<MOVES[i]<<" ";
     // MOVES.clear();
-   
     // cointype(6,1);
     // for(int i=0;i<MOVES.size();i++)
     //     std::cout<<MOVES[i]<<" ";
-    cointype(3,4);
+    // MOVES.clear();
+    // cointype(3,4);
+    // for(int i=0;i<MOVES.size();i++)
+    //     std::cout<<MOVES[i]<<" ";
+    // MOVES.clear();
+    // cointype(2,2);
+    // for(int i=0;i<MOVES.size();i++)
+    //     std::cout<<MOVES[i]<<" ";
+    // MOVES.clear();
+    cointype(4,7);
+    std::cout<<"\n"<<MOVES.size();
     for(int i=0;i<MOVES.size();i++)
         std::cout<<MOVES[i]<<" ";
+    std::cout<<"\n";
+// error
+// bottomleft =1 61 bottomleft =0 50  <=kill 
+// bottomright =1 63 bottomright =1 54 bottomright =1 45 bottomright =1 36 bottomright =0 27 61 63 54 45 36
+
+
     // queen(4,3);
     // queen(4,4);
     //  queen(4,4);
