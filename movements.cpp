@@ -20,9 +20,9 @@ int board [8][9]=
 { 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' },//white 0
 { 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P' },//white 1
 { ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//space//32 2
-{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },// 3
+{ ' ',  ' ',  ' ',  ' ',  'n',  ' ',  ' ',  ' ' },// 3
 { ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//4
-{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//5
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  'P',  ' ' },//5
 { 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p' },//black 6
 { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' },//black 7
 };
@@ -354,7 +354,6 @@ void knight(int row,int col)
         std::cout<<(is_enemy(row,col,row-2,col+1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"downleft= "<<downleft(row,col)<<" "<<row+2<<col-1;
         std::cout<<(is_enemy(row,col,row+2,col-1)==1?"<= kill ":" ")<<std::endl;
-
     std::cout<<"downright= "<<downright(row,col)<<" "<<row+2<<col+1;
         std::cout<<(is_enemy(row,col,row+2,col+1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"leftup= "<<leftup(row,col)<<" "<<row-1<<col-2;
@@ -365,6 +364,23 @@ void knight(int row,int col)
         std::cout<<(is_enemy(row,col,row-1,col+2)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"right down= "<<rightdown(row,col)<<" "<<row+1<<col+2;
         std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;
+//vector psuh
+    if(upleft(row,col) == 1)
+        MOVES.push_back(number_to_string(row-2,col-1));
+    if(upright(row,col) == 1)
+        MOVES.push_back(number_to_string(row-2,col+1));
+    if(downleft(row,col) == 1)
+        MOVES.push_back(number_to_string(row+2,col-1));
+    if(downright(row,col) == 1)
+        MOVES.push_back(number_to_string(row+2,col+1));
+    if(leftdown(row,col) == 1)
+        MOVES.push_back(number_to_string(row+1,col-2));
+    if(leftup(row,col) == 1)
+        MOVES.push_back(number_to_string(row-1,col-2));
+    if(rightup(row,col) == 1)
+        MOVES.push_back(number_to_string(row+1,col+2));
+    if(rightdown(row,col) == 1)
+        MOVES.push_back(number_to_string(row-1,col+2));
 }
 
 //#white pawn
@@ -479,12 +495,15 @@ void cointype(int row,int col)
 
 int main()
 {
-    cointype(1,1);
-    for(int i=0;i<MOVES.size();i++)
-        std::cout<<MOVES[i]<<" ";
-    MOVES.clear();
+    // cointype(1,1);
+    // for(int i=0;i<MOVES.size();i++)
+    //     std::cout<<MOVES[i]<<" ";
+    // MOVES.clear();
    
-    cointype(6,1);
+    // cointype(6,1);
+    // for(int i=0;i<MOVES.size();i++)
+    //     std::cout<<MOVES[i]<<" ";
+    cointype(3,4);
     for(int i=0;i<MOVES.size();i++)
         std::cout<<MOVES[i]<<" ";
     // queen(4,3);
