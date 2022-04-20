@@ -96,8 +96,6 @@ void horizontal(int row,int col)
        
         if(col-move >-1)
         cout<<"left ="<<left(row,(abs(col-move)))<<" "<<row<<abs(col-move)<<(is_enemy(row,col,row,abs(col-move))?" <=kill " :" ");
-        // if(col+move<8)
-        // cout<<"right ="<<right(row,move+col)<<" "<<row<<col+move<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
         move++;
         if (move>7) break;
     }
@@ -105,8 +103,6 @@ void horizontal(int row,int col)
     while(1)//horizontal right
     {
        
-        // if(col-move >-1)
-        // cout<<"left ="<<left(row,(abs(col-move)))<<" "<<row<<abs(col-move)<<(is_enemy(row,col,row,abs(col-move))?" <=kill " :" ");
         if(col+move<8)
         cout<<"right ="<<right(row,move+col)<<" "<<row<<col+move<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
         //if kill break the loop
@@ -120,16 +116,12 @@ void vertical(int row,int col)
     {
         if(row-move>-1)
         cout<<"top ="<<top(abs((row-move)),col)<<" "<<abs((row-move))<<col<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
-        // if(row+move<8)
-        //     cout<<"bottom ="<<bottom(row+move,col)<<" "<<row+move<<col<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
         move++;
         if (move>7) break;
     }
     move=1;
     while(1)//verticalbottom
     {
-        // if(row-move>-1)
-        // cout<<"top ="<<top(abs((row-move)),col)<<" "<<abs((row-move))<<col<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
         if(row+move<8)
             cout<<"bottom ="<<bottom(row+move,col)<<" "<<row+move<<col<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
         move++;
@@ -177,17 +169,12 @@ void rightdiag(int row,int col)//"\"
        
     if(col-move >=0 && row-move>=0)
         cout<<"bottomleft ="<<bottomleft(abs(row-move),(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<(is_enemy(row,col,abs(row-move),abs(col-move))?" <=kill " :" ");
-    // if(col+move<=7 && row+move<=7) 
-    //     cout<<"topright ="<<topright(row+move,move+col)<<" "<<row+move<<col+move<<(is_enemy(row,col,row+move,col+move)?" <=kill " :" ");
         move++;
         if (move>7) break;
      }
     move=1;
     while(1)//horizontal v->
     {
-       
-    // if(col-move >=0 && row-move>=0)
-    //     cout<<"bottomleft ="<<bottomleft(abs(row-move),(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<(is_enemy(row,col,abs(row-move),abs(col-move))?" <=kill " :" ");
     if(col+move<=7 && row+move<=7) 
         cout<<"topright ="<<topright(row+move,move+col)<<" "<<row+move<<col+move<<(is_enemy(row,col,row+move,col+move)?" <=kill " :" ");
         move++;
@@ -202,17 +189,12 @@ void leftdiag(int row,int col)//"/"
        
     if(col+move <=7 && row-move>=0)
         cout<<"bottomright ="<<bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<(is_enemy(row,col,abs(row-move),abs(col+move))?" <=kill " :" ");
-    // if(col-move>=0 && row+move<=7) 
-    //     cout<<"topleft ="<<topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<(is_enemy(row,col,row+move,abs(col-move))?" <=kill " :" ");
         move++;
         if (move>7) break;
     }
     move=1;
     while(1)//horizontal<-v
     {
-       
-    // if(col+move <=7 && row-move>=0)
-    //     cout<<"bottomright ="<<bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<(is_enemy(row,col,abs(row-move),abs(col+move))?" <=kill " :" ");
     if(col-move>=0 && row+move<=7) 
         cout<<"topleft ="<<topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<(is_enemy(row,col,row+move,abs(col-move))?" <=kill " :" ");
         move++;
@@ -239,9 +221,9 @@ void queen(int row,int col)
 }
 int main()
 {
-    queen(4,4);
-    // bishop(3,7);
+    // queen(4,4);
+    // bishop(3,4);
     // king(4,4);
     // king(7,1);
-    // rook(4,4);
+    rook(4,4);
 }
