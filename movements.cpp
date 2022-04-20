@@ -3,13 +3,13 @@ using namespace std;
 /*0     1      2    3     4     5      6     7    */
 int board [8][8]=
 { 
-{ 'R',  ' ',  'B',  'Q',  'K',  'B',  ' ',  'K' },//white 0
+{ 'R',  ' ',  'B',  'Q',  'h',  'B',  ' ',  'K' },//white 0
 { ' ',  'k',  'P',  'P',  ' ',  'p',  ' ',  ' ' },//white 1
-{ ' ',  ' ',  ' ' ,  ' ',  'P',  ' ',  ' ',  ' ' },//space//32 2
-{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  'K' },// 3
-{ 'k',  ' ',  'K',  ' ',  'q',  ' ',  'Q',  ' ' },//4
-{ ' ',  ' ',  'b',  ' ',  'p',  ' ',  ' ',  ' ' },//5
-{ ' ',  ' ',  'p',  'p',  ' ',  'p',  'p',  'p' },//black 6
+{ ' ',  ' ',  ' ',  'P',  'P',  'P',  ' ',  ' ' },//space//32 2
+{ ' ',  ' ',  'K',  ' ',  ' ',  ' ',  'Q',  'h' },// 3
+{ 'k',  ' ',  'k',  ' ',  'h',  ' ',  'Q',  ' ' },//4
+{ ' ',  ' ',  'K',  ' ',  'p',  ' ',  'Q',  ' ' },//5
+{ ' ',  ' ',  'p',  'P',  ' ',  'P',  'p',  'p' },//black 6
 { ' ',  'K',  'b',  'q',  'k',  'b',  'n',  'K' },//black 7
 };
 //7,4
@@ -271,15 +271,99 @@ void queen(int row,int col)
     leftdiag(row,col);
     std::cout<<"\n";
 }
+int upleft(int row,int col)
+{
+    if ((row-2)<0||(col-1)<0) return 0;
+    return 1;
+}
+int upright(int row,int col)
+{
+    if ((row-2)<0||(col+1)>7) return 0;
+    int indication=is_enemy(row,col,row-2,col+1);
+    if (indication==2) return 0;
+    return 1;
+}
+int downleft(int row,int col)
+{
+    if ((row+2)>7||(col-1)<0) return 0;
+    
+    int indication=is_enemy(row,col,(row+2),(col-1));
+    if (indication==2) return 0;
+    return 1;
+}
+int downright(int row,int col)
+{
+    if ((row+2)>7||(col+1)>7) return 0;
+    int indication=is_enemy(row,col,row+2,col+1);
+    if (indication==2) return 0;
+    return 1;
+}
+int leftdown(int row,int col)
+{
+    if ((row+1)>7||(col-2)<0) return 0;
+    int indication=is_enemy(row,col,row+1,col-2);
+    if (indication==2) return 0;
+    return 1;
+}
+int leftup(int row,int col)
+{
+    if ((row-1)<0||(col-2)<0) return 0;
+    int indication=is_enemy(row,col,row-1,col-2);
+    if (indication==2) return 0;
+    return 1;
+}
+int rightdown(int row,int col)
+{
+    if((row+1)>7 ||(col+2)>7 ) return 0;
+    int indication=is_enemy(row,col,row-+1,col+2);
+    if (indication==2) return 0;
+    return 1;
+}
+int rightup(int row,int col)
+{
+    if((row-1)<0 ||(col+2)>7 ) return 0;
+    int indication=is_enemy(row,col,row-1,col+2);
+    if (indication==2) return 0;
+    return 1;
+}
+
+void knight(int row,int col)
+{   
+    std::cout<<"upleft= "<<upleft(row,col)<<" "<<row-2<<col-1;
+    if(is_enemy(row,col,row-2,col-1)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+    std::cout<<"upright= "<<upright(row,col)<<" "<<row-2<<col+1;
+    if(is_enemy(row,col,row-2,col+1)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+    std::cout<<"downleft= "<<downleft(row,col)<<" "<<row+2<<col-1;
+    if(is_enemy(row,col,row+2,col-1)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+    std::cout<<"downright= "<<downright(row,col)<<" "<<row+2<<col+1;
+    if(is_enemy(row,col,row+2,col+1)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+    std::cout<<"leftup= "<<leftup(row,col)<<" "<<row-1<<col-2;
+    if(is_enemy(row,col,row-1,col-2)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+    std::cout<<"leftdown= "<<leftdown(row,col)<<" "<<row+1<<col-2;
+    if(is_enemy(row,col,row+1,col-2)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+    std::cout<<"rightup = "<<rightup(row,col)<<" "<<row-1<<col+2;
+    if(is_enemy(row,col,row-1,col+2)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<"  "<<std::endl;
+    std::cout<<"right down= "<<rightdown(row,col)<<" "<<row+1<<col+2;
+    if(is_enemy(row,col,row+1,col+2)==1)
+        std::cout<<"<= kill "<<std::endl; else std::cout<<" "<<std::endl;
+}
+
 int main()
 {
+    knight(3,7);
     //  queen(4,4);
     // bishop(3,4);
-     king(0,7);
+    //  king(0,7);
     // king(7,1);
     // rook(4,4);
 }
-
 // /*
 // #include<iostream>
 // using namespace std;
