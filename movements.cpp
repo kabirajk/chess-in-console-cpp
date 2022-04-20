@@ -1,18 +1,30 @@
 #include<iostream>
 using namespace std;
-/*0     1      2    3     4     5      6     7    */
-int board [8][8]=
+// /*0     1      2    3     4     5      6     7    */
+// int board [8][8]=
+// { 
+// { 'R',  ' ',  'B',  'Q',  'h',  'B',  ' ',  'K' },//white 0
+// { ' ',  'k',  'P',  'P',  ' ',  'p',  ' ',  ' ' },//white 1
+// { ' ',  ' ',  ' ',  'P',  'P',  'P',  ' ',  ' ' },//space//32 2
+// { ' ',  ' ',  'K',  ' ',  ' ',  ' ',  'Q',  'h' },// 3
+// { 'k',  ' ',  'k',  ' ',  'h',  ' ',  'Q',  ' ' },//4
+// { ' ',  ' ',  'K',  ' ',  'p',  ' ',  'Q',  ' ' },//5
+// { ' ',  ' ',  'p',  'P',  ' ',  'P',  'p',  'p' },//black 6
+// { ' ',  'K',  'b',  'q',  'k',  'b',  'n',  'K' },//black 7
+// };
+// //7,4
+int board [8][9]=
 { 
-{ 'R',  ' ',  'B',  'Q',  'h',  'B',  ' ',  'K' },//white 0
-{ ' ',  'k',  'P',  'P',  ' ',  'p',  ' ',  ' ' },//white 1
-{ ' ',  ' ',  ' ',  'P',  'P',  'P',  ' ',  ' ' },//space//32 2
-{ ' ',  ' ',  'K',  ' ',  ' ',  ' ',  'Q',  'h' },// 3
-{ 'k',  ' ',  'k',  ' ',  'h',  ' ',  'Q',  ' ' },//4
-{ ' ',  ' ',  'K',  ' ',  'p',  ' ',  'Q',  ' ' },//5
-{ ' ',  ' ',  'p',  'P',  ' ',  'P',  'p',  'p' },//black 6
-{ ' ',  'K',  'b',  'q',  'k',  'b',  'n',  'K' },//black 7
+{ 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' },//white 0
+{ 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P' },//white 1
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//space//32 2
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },// 3
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//4
+{ ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ' },//5
+{ 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p' },//black 6
+{ 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' },//black 7
 };
-//7,4
+
 int iswhite(int row,int col)
 {
     char c=board[row][col];
@@ -315,7 +327,7 @@ int leftup(int row,int col)
 int rightdown(int row,int col)
 {
     if((row+1)>7 ||(col+2)>7 ) return 0;
-    int indication=is_enemy(row,col,row-+1,col+2);
+    int indication=is_enemy(row,col,row+1,col+2);
     if (indication==2) return 0;
     return 1;
 }
@@ -330,7 +342,6 @@ int rightup(int row,int col)
 void knight(int row,int col)
 {   
     std::cout<<"upleft= "<<upleft(row,col)<<" "<<row-2<<col-1;
-    
         std::cout<<(is_enemy(row,col,row-2,col-1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"upright= "<<upright(row,col)<<" "<<row-2<<col+1;
         std::cout<<(is_enemy(row,col,row-2,col+1)==1?"<= kill ":" ")<<std::endl;
@@ -349,14 +360,116 @@ void knight(int row,int col)
         std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;
 }
 
+//#white pawn
+namespace white
+{
+int move(int row,int col)
+{  
+    if((row+1)>7) return 0;
+    if(board[row+1][col]==32)
+        return 1;
+    else return 0;
+}
+int twomove(int row,int col)
+{    int move=0;//white
+    if ((row+1)>7) return 0;
+    int init=1;
+    if(row==init)
+    while(board[row+1+move][col]==32 && move<2)
+        move++;
+    return move;
+    
+}
+int moveright(int row,int col)
+{
+    if((row+1)>7 || (col+1)>7) return 0;
+    return is_enemy(row,col,row+1,col+1);//check enemey
+}
+int moveleft(int row,int col)
+{
+    if((row+1)>7 || (col-1)<0) return 0;
+    return is_enemy(row,col,row+1,col-1);//check enemey
+}
+}
+//#black
+//pawn{
+namespace black
+{
+int move(int row,int col)
+{  
+    if((row-1)<0) return 0;
+    if(board[row-1][col]==32)
+        return 1;
+    else return 0;
+}
+int twomove(int row,int col)
+{    int move=0;//black
+    if ((row-1)>7) return 0;
+    int init=6;
+    if(row==init)
+    while(board[row-move][col]==32 && move<2)
+        move++;
+    return move;
+}
+int moveright(int row,int col)
+{
+    if((row-1)<0 || (col+1)>7) return 0;
+    return is_enemy(row,col,row-1,col+1);//check enemey
+}
+int moveleft(int row,int col)
+{
+    if((row-1)<0 || (col-1)<0) return 0;
+    return is_enemy(row,col,row-1,col-1);//check enemey
+}
+}
+
+void pawn(int row,int col)
+{
+    if (iswhite(row,col))
+    {
+        std::cout<<"twomove"<<white::twomove(row,col)<<" ";
+        std::cout<<"move"<<white::move(row,col)<<" ";
+        std::cout<<"moveright"<<white::moveright(row,col)<<" ";
+        std::cout<<"moveleft"<<white::moveleft(row,col)<<" ";
+    }
+    else
+        {
+        std::cout<<"twomove"<<white::twomove(row,col)<<" ";
+        std::cout<<"move"<<white::move(row,col)<<" ";
+        std::cout<<"moveright"<<white::moveright(row,col)<<" ";
+        std::cout<<"moveleft"<<white::moveleft(row,col)<<" ";
+        }
+}
+void cointype(int row,int col)
+{   
+    char coin=board[row][col];
+    if(coin=='K' || coin =='k')
+        king(row,col);
+    else if(coin=='Q' || coin =='Q')
+        queen(row,col);
+    else if(coin=='B' || coin =='b')
+        bishop(row,col);
+    else if(coin=='N' || coin =='n')
+        knight(row,col);
+    else if(coin=='R' || coin =='r')
+        rook(row,col);
+    if(coin=='P' || coin =='p')
+        pawn(row,col);
+    else
+        std::cout<<"invalid input";
+}
+
 int main()
 {
-    knight(3,7);
+    cointype(1,1);
+    // queen(4,3);
+    // queen(4,4);
     //  queen(4,4);
     // bishop(3,4);
     //  king(0,7);
     // king(7,1);
     // rook(4,4);
+    return 0;
 }
 // /*
 // #include<iostream>
