@@ -1,8 +1,9 @@
 #include<iostream>
 using namespace std;
+#include<fstream>
 #include<vector>
 std::vector<string>MOVES;
-vector<string>CompltedMoves;
+vector<string>Completed_moves;
 // /*0     1      2    3     4     5      6     7    */
 // int board [8][8]=
 // { 
@@ -48,7 +49,7 @@ string numeric_to_Alphanumeric(int row,int col)
 //for pusing purpose//completed moves
 void push_to_completed (string completedmove)
 {
-    CompltedMoves.push_back(completedmove);
+    Completed_moves.push_back(completedmove);
 }
 
 int row(string s)//internal 1,1
@@ -454,6 +455,8 @@ void queen(int row,int col)
 int upleft(int row,int col)
 {
     if ((row-2)<0||(col-1)<0) return 0;
+    int indication=is_enemy(row,col,row-2,col-1);
+    if (indication==2) return 0;
     return 1;
 }
 int upright(int row,int col)
@@ -528,21 +531,45 @@ void knight(int row,int col)
         std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;*/
 //vector psuh
     if(upleft(row,col) == 1)
-        MOVES.push_back(number_to_string(row-2,col-1));
+        {
+            MOVES.push_back(number_to_string(row-2,col-1));
+            if(is_enemy(row,col,row-2,col-1))  MOVES.push_back("*");
+        }
     if(upright(row,col) == 1)
-        MOVES.push_back(number_to_string(row-2,col+1));
+        {
+            MOVES.push_back(number_to_string(row-2,col+1));
+        if(is_enemy(row,col,row-2,col+1)==1) MOVES.push_back("*");
+        }
     if(downleft(row,col) == 1)
-        MOVES.push_back(number_to_string(row+2,col-1));
+        {
+            MOVES.push_back(number_to_string(row+2,col-1));
+            if(is_enemy(row,col,(row+2),(col-1))==1) MOVES.push_back("*");
+        }
     if(downright(row,col) == 1)
-        MOVES.push_back(number_to_string(row+2,col+1));
+        {
+            MOVES.push_back(number_to_string(row+2,col+1));
+            if(is_enemy(row,col,row+2,col+1)==1) MOVES.push_back("*");
+        }
     if(leftdown(row,col) == 1)
-        MOVES.push_back(number_to_string(row+1,col-2));
+        {
+            MOVES.push_back(number_to_string(row+1,col-2));
+        if(is_enemy(row,col,row+1,col-2)==1) MOVES.push_back("*");
+        }
     if(leftup(row,col) == 1)
+       {
         MOVES.push_back(number_to_string(row-1,col-2));
-    if(rightup(row,col) == 1)
-        MOVES.push_back(number_to_string(row+1,col+2));
+        if(is_enemy(row,col,row-1,col-2)==1) MOVES.push_back("*");
+       }
     if(rightdown(row,col) == 1)
-        MOVES.push_back(number_to_string(row-1,col+2));
+        {
+        MOVES.push_back(number_to_string(row+1,col+2));
+        if(is_enemy(row,col,row+1,col+2)==1) MOVES.push_back("*");
+        }
+    if(rightup(row,col) == 1)
+        {
+            MOVES.push_back(number_to_string(row-1,col+2));
+        if(is_enemy(row,col,row-1,col+2)==1) MOVES.push_back("*");
+        }
 }
 
 //#white pawn
@@ -596,7 +623,7 @@ int moveright(int row,int col)
 }
 int moveleft(int row,int col)
 {
-    if((row-1)<0 || (col-1)<0) return 0;
+    if((row-1)<0 ||(col-1)<0) return 0;
     return is_enemy(row,col,row-1,col-1);//check enemey
 }
 }
@@ -615,9 +642,16 @@ void pawn(int row,int col)
         if(white::move(row,col)==1)
             MOVES.push_back(number_to_string(row+1,col));
         if(white::moveright(row,col)==1)
+            {
             MOVES.push_back(number_to_string(row+1,col+1));
-        if(white::moveright(row,col)==1)
+            MOVES.push_back("*");
+            }
+        if(white::moveleft(row,col)==1)
+           {
             MOVES.push_back(number_to_string(row+1,col-1));
+            MOVES.push_back("*");
+            }
+
     }
     else
     {
@@ -632,9 +666,15 @@ void pawn(int row,int col)
         if(black::move(row,col)==1)
             MOVES.push_back(number_to_string(row-1,col));
         if(black::moveright(row,col)==1)
-            MOVES.push_back(number_to_string(row-1,col+1));
-        if(black::moveright(row,col)==1)
-            MOVES.push_back(number_to_string(row-1,col-1));
+            {
+                MOVES.push_back(number_to_string(row-1,col+1));
+                MOVES.push_back("*");
+            }
+        if(black::moveleft(row,col)==1)
+            {
+                MOVES.push_back(number_to_string(row-1,col-1));
+                MOVES.push_back("*");
+            }
         }
 }
 void cointype(int row,int col)
@@ -730,45 +770,123 @@ void printboard()
 }
 
 void printv()
-{
+{   std::cout<<"Here the available moves \n";
     for(int i=0;i<MOVES.size();i++)
     {
-        cout<<MOVES[i]<<" ";
+        // cout<<MOVES[i]<<" ";
+        if (MOVES[i] != "*")
+            std::cout<<numeric_to_Alphanumeric(row(MOVES[i]),col(MOVES[i]))<<" ";
+        else if(MOVES[i]=="*")
+            std::cout<<"\b"<<MOVES[i]<<"  ";
     }
-    cout<<"\n\n";
-    for(int i=0;i<8;i++)
+    cout<<"\n";
+    // for(int i=0;i<8;i++)
+    // {
+    //     for(int j=0;j<8;j++)
+    //     {
+    //         cout<<"  "<<i<<j<<"="<<(char)board[i][j]<<" ";
+    //     }
+    //     cout<<"\n";
+    // }
+    // cout<<"\n\n";
+}
+void exit()
+{
+    fstream logfile("log.txt",ios::app);
+    try
     {
-        for(int j=0;j<8;j++)
-        {
-            cout<<"  "<<i<<j<<"="<<(char)board[i][j]<<" ";
-        }
-        cout<<"\n";
+        if(!logfile.is_open())
+            throw "There is no file";
+        logfile<<"\n";
     }
-    cout<<"\n\n";
+    catch(const char *c)
+    {   
+        ofstream logfile("log.txt",ios::app);
+    }
+    for(int i=0;i<Completed_moves.size();i++)
+    {
+        logfile<<Completed_moves[i]<<std::endl;
+    }
 }
 
+
 int main()
-{
-    printboard();
-    while(true)
-    {
-        string s;
-       std::cout<<"chose the coin";
-       std::cin>>s;
-       s=Alphanumeric_to_numberstring(s);
-       int srow=row(s);
-       int scol=col(s);
-       cointype(srow,scol);
-       std::cout<<"chose destionation";
-       printv();
-       std::cin>>s;
-       if(is_move_avilable(s))
-       {
-           int drow=row(s),dcol=col(s);
-           change_coins(srow,scol,drow,dcol);
-           printboard();
-       }
-       MOVES.clear();
+{   printboard();
+    while (1)
+    {//print board firs
+        string source;
+        std::cout<<(Completed_moves.size()%2==0?"White's Turn":"Black's Turn")<<std::endl;
+        std::cout<<"Enter the position//command: ";
+        std::cin>>source;
+        if(source=="PRINT")
+            printboard();
+        if(source=="Exit")
+        {
+            exit();
+            break;
+        }
+        else
+            {
+                source=Alphanumeric_to_numberstring(source);
+                int source_row=row(source);
+                int source_col=col(source);
+                if(Completed_moves.size()%2 == !iswhite(source_row,source_col))
+                    {
+                        cointype(source_row,source_col);
+                        if(MOVES.size()==0)
+                            {   system("cls");
+                                std::cout<<"# The coin is blocked \n";
+                            }
+                        else{
+                            std::cout<<"\n";
+                            printv( );
+                            string destinaion_string;
+                            std::cout<<"\nEnter the destinaion of the coin: "<<std::endl;
+                            std::cin>>destinaion_string;
+                            destinaion_string=Alphanumeric_to_numberstring(destinaion_string);//b1to11
+                            if (is_move_avilable(destinaion_string))
+                                {
+                                    int destrow=row(destinaion_string); int destcol=col(destinaion_string);
+                                    change_coins(source_row,source_col,destrow,destcol);
+                                    
+                                    push_to_completed(numeric_to_Alphanumeric(source_row,source_col)+"->"+numeric_to_Alphanumeric(destrow,destcol));
+
+                                    std::cout<<Completed_moves.back()<<std::endl;
+                                }
+                            MOVES.clear();
+                            system("cls");
+                            }
+
+                    }
+
+                else
+                    std::cout<<"u picked a wrong coin that is "<<(iswhite(source_row,source_col)?"White":"Black")<<" Coin."<<std::endl;
+            
+                printboard();
+            }
     }
+    
+
+    // printboard();
+    // while(true)
+    // {
+    //     string s;
+    //    std::cout<<"chose the coin";
+    //    std::cin>>s;
+    //    s=Alphanumeric_to_numberstring(s);
+    //    int srow=row(s);
+    //    int scol=col(s);
+    //    cointype(srow,scol);
+    //    std::cout<<"chose destionation";
+    //    printv();
+    //    std::cin>>s;
+    //    if(is_move_avilable(s))
+    //    {
+    //        int drow=row(s),dcol=col(s);
+    //        change_coins(srow,scol,drow,dcol);
+    //        printboard();
+    //    }
+    //    MOVES.clear();
+    // }
 
 }
