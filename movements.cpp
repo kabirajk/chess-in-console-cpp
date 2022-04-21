@@ -2,6 +2,7 @@
 using namespace std;
 #include<vector>
 std::vector<string>MOVES;
+vector<string>CompltedMoves;
 // /*0     1      2    3     4     5      6     7    */
 // int board [8][8]=
 // { 
@@ -27,9 +28,36 @@ int board [8][8]=
 { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' },//black 7
 };
 
-string number_to_string(int row,int col)
+string number_to_string(int row,int col)// 11 to "11"
 {   string s="";
     return s+((char)(48+row))+(((char)(48+col)));
+}
+string Alphanumeric_to_numberstring(string alnu)
+{   string s="";//b1 to 01 //col row to rwo col
+    char row=alnu[1]-1;
+    char col=(48+(alnu[0]-97));
+    return s+row+col;
+}
+string numeric_to_Alphanumeric(int row,int col)
+{//11 to b1//col row
+    string s;
+    char r=48+row+1;
+    char c=97+col;
+    return s+c+r;
+}
+//for pusing purpose//completed moves
+void push_to_completed (string completedmove)
+{
+    CompltedMoves.push_back(completedmove);
+}
+
+int row(string s)//internal 1,1
+{ 
+    return ((int)s[0]-48);
+}
+int col(string s)//internal 1,1
+{ 
+    return ((int)s[1]-48);
 }
 
 int iswhite(int row,int col)
@@ -40,8 +68,7 @@ int iswhite(int row,int col)
 }
 
 int is_enemy(int crow,int ccol,int drow,int dcol)
-{   cout<<"\n"<<drow<<dcol<<"\n";
-    if(drow>7||dcol>7||dcol<0||drow<0) return 0;
+{//   cout<<"\n"<<drow<<dcol<<"\n";if(drow>7||dcol>7||dcol<0||drow<0) return 0;
     if(iswhite(crow,ccol))
         {   if(iswhite(crow,ccol) && iswhite(drow,dcol)&&board[drow][dcol]!=32)    return 2;//friends
             else if(board[drow][dcol]==32 ) return 0;//space
@@ -101,7 +128,7 @@ int bottomleft(int r,int c)
 
 void king(int row ,int col)//check king movemensts//check to cordinates
 { //make logic for friend and possibe move with if else
-    int indication=is_enemy(row,col,row-1,col);
+   /* int indication=is_enemy(row,col,row-1,col);
         if (indication!=2)
             cout<<"top ="<<top(row,col)<<row-1<<col<<(indication==1 ?" <=kill " :"")<<endl;
     indication=is_enemy(row,col,row+1,col);
@@ -124,7 +151,7 @@ void king(int row ,int col)//check king movemensts//check to cordinates
             cout<<"bottomright ="<<bottomright(row,col)<<row+1<<col+1<<(indication==1 ?" <=kill " :"")<<endl;
      indication=is_enemy(row,col,row+1,col-1);
         if (indication!=2)
-            cout<<"bottomleft ="<<bottomleft(row,col)<<row+1<<col-1<<(indication==1 ?" <=kill " :"")<<endl;
+            cout<<"bottomleft ="<<bottomleft(row,col)<<row+1<<col-1<<(indication==1 ?" <=kill " :"")<<endl;*/
 // vecor push
 if(top(row,col) == 1 &&is_enemy(row,col,row-1,col)!=2)
         MOVES.push_back(number_to_string(row-1,col));
@@ -146,11 +173,10 @@ if(bottomleft(row,col) == 1&&is_enemy(row,col,row+1,col-1) !=2)
 }
 namespace line
 {
-    int top(int r,int c)//-- decrease
+int top(int r,int c)//-- decrease
 {   
     if(((r)>=0)&&(c>=0 && c<=7)) return 1;
     else return 0;
-
 }
 int bottom(int r,int c)
 {
@@ -176,7 +202,7 @@ void horizontal(int row,int col)
         int indication=is_enemy(row,col,row,abs(col-move));
         if(indication==2)   break;
         if(col-move >-1)
-        {cout<<"left ="<<line::left(row,(abs(col-move)))<<" "<<row<<abs(col-move);
+        {//cout<<"left ="<<line::left(row,(abs(col-move)))<<" "<<row<<abs(col-move);
         if(line::left(row,(abs(col-move))) == 1&& is_enemy(row,col,row,abs(col-move)) !=2)
         MOVES.push_back(number_to_string(row,abs(col-move)));}
             if (indication==1)
@@ -192,7 +218,7 @@ void horizontal(int row,int col)
         if(indication==2) break;
         
         if(col+move<8)
-        {cout<<"right ="<<line::right(row,move+col)<<" "<<row<<col+move;//<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
+        {//cout<<"right ="<<line::right(row,move+col)<<" "<<row<<col+move;//<<(is_enemy(row,col,row,col+move)?" <=kill " :" ");
         //if kill break the loop
         if(line::right(row,move+col) == 1&& is_enemy(row,col,row,col+move) !=2)
         MOVES.push_back(number_to_string(row,move+col));}
@@ -209,15 +235,18 @@ void vertical(int row,int col)
     {   int indication=is_enemy(row,col,abs(row-move),col);
         if(indication==2) break;
         if(row-move>=0)
-        {cout<<"top ="<<line::top(abs(row-move),col)<<" "<<abs((row-move))<<col;//<<(is_enemy(row,col,abs(row-move),col)?" <=kill " :" ");
+        {
+        //cout<<line::top(abs(row-move),col)<<" "<<abs((row-move))<<col<<(is_enemy(row,col,abs(row-move),col)?==1" <=kill " :" ");
         if(line::top(abs(row-move),col) == 1 &&is_enemy(row,col,abs(row-move),col)!=2)
-        MOVES.push_back(number_to_string(abs(row-move),col));
+            { 
+                MOVES.push_back(number_to_string(abs(row-move),col));
+            if (is_enemy(row,col,abs(row-move),col)==1) MOVES.push_back("*");
+            }
         }
         else break;
         if (indication==1)
-            { std::cout<<" <=kill "; break;}
+            // { std::cout<<" <=kill "; break;}
              
-            
         move++;
         if (move>7) break;
     }
@@ -226,10 +255,11 @@ void vertical(int row,int col)
     {   int indication=is_enemy(row,col,row+move,col);
             if(indication==2) break;
         if(row+move<8)
-          { cout<<"bottom ="<<line::bottom(row+move,col)<<" "<<row+move<<col;//<<(is_enemy(row,col,row+move,col)?" <=kill " :" ");
+          {// cout<<"bottom ="<<line::bottom(row+move,col)<<" "<<row+move<<col;//<<(is_enemy(row,col,row+move,col)?==1" <=kill " :" ");
             if(line::bottom(row+move,col) == 1&& is_enemy(row,col,row+move,col)!=2)
-        MOVES.push_back(number_to_string(row+move,col));
-        }
+               {  MOVES.push_back(number_to_string(row+move,col));
+                if (is_enemy(row,col,row+move,col)==1) MOVES.push_back("*");}
+            }
         else break;
 
         if (indication==1)
@@ -276,8 +306,6 @@ int bottomleft(int r,int c)
 }
 } 
 
-
-
 void rightdiag(int row,int col)//"\"
 {
     int  move=1;
@@ -286,7 +314,7 @@ void rightdiag(int row,int col)//"\"
         if(indication==2) break;
        
     if(col-move >=0 && row-move>=0)
-        {cout<<"bottomleft ="<<diag::bottomleft(abs(row-move)-1,(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<" ";
+        {//cout<<"bottomleft ="<<diag::bottomleft(abs(row-move)-1,(abs(col-move)))<<" "<<abs(row-move)<<(abs(col-move))<<" ";
         if(diag::bottomleft(abs(row-move),abs(col-move)) == 1&&is_enemy(row,col,abs(row-move),abs(col-move)) !=2)
         MOVES.push_back(number_to_string(abs(row-move),abs(col-move)));
         }
@@ -303,7 +331,7 @@ void rightdiag(int row,int col)//"\"
         int indication=is_enemy(row,col,row+move,col+move);
         if(indication==2) break;
     if(col+move<=7 && row+move<=7) 
-    {    cout<<"topright ="<<diag::topright(row+move,move+col)<<" "<<row+move<<col+move<<" ";
+    {   // cout<<"topright ="<<diag::topright(row+move,move+col)<<" "<<row+move<<col+move<<" ";
         if(diag::topright(row+move,move+col) == 1 && is_enemy(row,col,row+move,col+move) !=2)
         MOVES.push_back(number_to_string(row+move,col+move));
         }
@@ -322,7 +350,7 @@ void leftdiag(int row,int col)//"/"
         if(indication==2) break;
        
     if(col+move <=7 && row-move>=0)
-       { cout<<"bottomright ="<<diag::bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<" ";
+       { //cout<<"bottomright ="<<diag::bottomright(abs(row-move),(abs(col+move)))<<" "<<abs(row-move)<<(abs(col+move))<<" ";
         if(diag::bottomright(abs(row-move),(abs(col+move))) == 1 && is_enemy(row,col,abs(row-move),abs(col+move))!=2)
         MOVES.push_back(number_to_string(abs(row-move),abs(col+move)));
         }
@@ -338,7 +366,7 @@ void leftdiag(int row,int col)//"/"
         int indication=is_enemy(row,col,row+move,abs(col-move));
         if(indication==2) break;
     if(col-move>=0 && row+move<=7) 
-       { cout<<"topleft ="<<diag::topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<" ";
+       { //cout<<"topleft ="<<diag::topleft(row+move,abs(move-col))<<" "<<row+move<<abs(col-move)<<" ";
        if(diag::topleft(row+move,abs(move-col)) == 1 && is_enemy(row,col,row+move,abs(col-move))!=2)
         MOVES.push_back(number_to_string(row+move,abs(col-move)));
        }
@@ -424,7 +452,8 @@ int rightup(int row,int col)
 }
 
 void knight(int row,int col)
-{   
+{  
+     /*
     std::cout<<"upleft= "<<upleft(row,col)<<" "<<row-2<<col-1;
         std::cout<<(is_enemy(row,col,row-2,col-1)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"upright= "<<upright(row,col)<<" "<<row-2<<col+1;
@@ -440,7 +469,7 @@ void knight(int row,int col)
     std::cout<<"rightup = "<<rightup(row,col)<<" "<<row-1<<col+2;
         std::cout<<(is_enemy(row,col,row-1,col+2)==1?"<= kill ":" ")<<std::endl;
     std::cout<<"right down= "<<rightdown(row,col)<<" "<<row+1<<col+2;
-        std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;
+        std::cout<<(is_enemy(row,col,row+1,col+2)==1?"<= kill ":" ")<<std::endl;*/
 //vector psuh
     if(upleft(row,col) == 1)
         MOVES.push_back(number_to_string(row-2,col-1));
@@ -520,35 +549,36 @@ void pawn(int row,int col)
 {
     if (iswhite(row,col))
     {
-        std::cout<<"twomove"<<white::twomove(row,col)<<" ";
+       /* std::cout<<"twomove"<<white::twomove(row,col)<<" ";
         std::cout<<"move"<<white::move(row,col)<<" ";
         std::cout<<"moveright"<<white::moveright(row,col)<<" ";
-        std::cout<<"moveleft"<<white::moveleft(row,col)<<" ";
+        std::cout<<"moveleft"<<white::moveleft(row,col)<<" ";*/
     
-    if(white::twomove(row,col)==1)
-        MOVES.push_back(number_to_string(row+2,col));
-    if(white::move(row,col)==1)
-        MOVES.push_back(number_to_string(row+1,col));
-    if(white::moveright(row,col)==1)
-        MOVES.push_back(number_to_string(row+1,col+1));
-    if(white::moveright(row,col)==1)
-        MOVES.push_back(number_to_string(row+1,col-1));
+        if(white::twomove(row,col)==1)
+            MOVES.push_back(number_to_string(row+2,col));
+        if(white::move(row,col)==1)
+            MOVES.push_back(number_to_string(row+1,col));
+        if(white::moveright(row,col)==1)
+            MOVES.push_back(number_to_string(row+1,col+1));
+        if(white::moveright(row,col)==1)
+            MOVES.push_back(number_to_string(row+1,col-1));
     }
     else
-        {std::cout<<"black";
+    {
+       /* std::cout<<"black";
         std::cout<<"twomove"<<black::twomove(row,col)<<" ";
         std::cout<<"move"<<black::move(row,col)<<" ";
         std::cout<<"moveright"<<black::moveright(row,col)<<" ";
-        std::cout<<"moveleft"<<black::moveleft(row,col)<<" ";
+        std::cout<<"moveleft"<<black::moveleft(row,col)<<" ";*/
 
-     if(black::twomove(row,col)==1)
-        MOVES.push_back(number_to_string(row-2,col));
-    if(black::move(row,col)==1)
-        MOVES.push_back(number_to_string(row-1,col));
-    if(black::moveright(row,col)==1)
-        MOVES.push_back(number_to_string(row-1,col+1));
-    if(black::moveright(row,col)==1)
-        MOVES.push_back(number_to_string(row-1,col-1));
+        if(black::twomove(row,col)==1)
+            MOVES.push_back(number_to_string(row-2,col));
+        if(black::move(row,col)==1)
+            MOVES.push_back(number_to_string(row-1,col));
+        if(black::moveright(row,col)==1)
+            MOVES.push_back(number_to_string(row-1,col+1));
+        if(black::moveright(row,col)==1)
+            MOVES.push_back(number_to_string(row-1,col-1));
         }
 }
 void cointype(int row,int col)
@@ -570,40 +600,119 @@ void cointype(int row,int col)
         std::cout<<"invalid input"<<board[row][col];
 }
 
+void change_coins(int from_row,int from_col,int to_row,int to_col)
+{   //check enemy forend//rechek avilablity
+    if(is_enemy(from_row ,from_col ,to_row,to_col))
+    {
+        board[to_row][to_col]=board[from_row][from_col];
+        board[from_row][from_col]=32;
+    //point +1
+    }
+    else if (is_enemy(from_row ,from_col ,to_row,to_col)==2)
+    {
+        std::cout<<"hey choose a different place";
+    }
+    else if(is_enemy(from_row ,from_col ,to_row,to_col)==0)
+    {
+        board[to_row][to_col]=board[from_row][from_col];
+        board[from_row][from_col]=32;
+    }
+}
+
+int is_move_avilable(string Index)
+{
+    for(int i=0;i<MOVES.size();i++)
+    {
+        if(MOVES[i]==Index)
+            {std::cout<<"matched";
+            return 1;}
+    }
+    std::cout<<"notmatched";return 0;
+}
+
+string coin(int row,int col)
+{   char coin=board[row][col];
+    
+    string s;
+    if(coin==32)
+        return s+"   ";
+    if(iswhite(row,col)) s+="W_";
+    else s+="B_";
+    if(coin=='K' || coin =='k')
+        s+="K";
+    else if(coin=='Q' || coin =='q')
+        s+="Q";
+    else if(coin=='B' || coin =='b')
+        s+="B";
+    else if(coin=='N' || coin =='n')
+        s+="N";
+    else if(coin=='R' || coin =='r')
+        s+="R";
+    else if(coin=='P' || coin =='p')
+        s+="P";
+
+    return s;
+}
+void printboard()
+{   string s="   ";
+    string ss="  ";
+    std::cout<<"      ";
+    for(int i=0;i<8;i++)
+        {
+            cout<< s+((char)(97+i))+s;
+        }
+    std::cout<<"\n\n";
+    for(int i=1;i<=8;i++)
+    {
+       cout<< s+((char)(48+i))+s;
+            for(int col=0;col<8;col++)
+            {
+                cout<< ss+(coin(i-1,col))+ss;
+            }
+        cout<<"\n\n";
+    }
+}
+
+void printv()
+{
+    for(int i=0;i<MOVES.size();i++)
+    {
+        cout<<MOVES[i]<<" ";
+    }
+    cout<<"\n\n";
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            cout<<"  "<<i<<j<<"="<<(char)board[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    cout<<"\n\n";
+}
+
 int main()
 {
-    // cointype(1,1);
-    // for(int i=0;i<MOVES.size();i++)
-    //     std::cout<<MOVES[i]<<" ";
-    // MOVES.clear();
-    // cointype(6,1);
-    // for(int i=0;i<MOVES.size();i++)
-    //     std::cout<<MOVES[i]<<" ";
-    // MOVES.clear();
-    // cointype(3,4);
-    // for(int i=0;i<MOVES.size();i++)
-    //     std::cout<<MOVES[i]<<" ";
-    // MOVES.clear();
-    // cointype(2,2);
-    // for(int i=0;i<MOVES.size();i++)
-    //     std::cout<<MOVES[i]<<" ";
-    // MOVES.clear();
-    cointype(4,7);
-    std::cout<<"\n"<<MOVES.size();
-    for(int i=0;i<MOVES.size();i++)
-        std::cout<<MOVES[i]<<" ";
-    std::cout<<"\n";
-// error
-// bottomleft =1 61 bottomleft =0 50  <=kill 
-// bottomright =1 63 bottomright =1 54 bottomright =1 45 bottomright =1 36 bottomright =0 27 61 63 54 45 36
+    printboard();
+    while(true)
+    {
+        string s;
+       std::cout<<"chose the coin";
+       std::cin>>s;
+       s=Alphanumeric_to_numberstring(s);
+       int srow=row(s);
+       int scol=col(s);
+       cointype(srow,scol);
+       std::cout<<"chose destionation";
+       printv();
+       std::cin>>s;
+       if(is_move_avilable(s))
+       {
+           int drow=row(s),dcol=col(s);
+           change_coins(srow,scol,drow,dcol);
+           printboard();
+       }
+       MOVES.clear();
+    }
 
-
-    // queen(4,3);
-    // queen(4,4);
-    //  queen(4,4);
-    // bishop(3,4);
-    //  king(0,7);
-    // king(7,1);
-    // rook(4,4);
-    return 0;
 }
