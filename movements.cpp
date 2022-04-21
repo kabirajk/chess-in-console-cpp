@@ -698,11 +698,8 @@ void cointype(int row,int col)
 
 void change_coins(int from_row,int from_col,int to_row,int to_col)
 {   //check enemy forend//rechek avilablity
-    if(board[to_row][to_col]!='k'||board[to_row][to_col]!='K')
-    {
-        cout<<"its king u made a check already";
-    }
-    else if(is_enemy(from_row ,from_col ,to_row,to_col))
+    
+    if(is_enemy(from_row ,from_col ,to_row,to_col))
     { 
         board[to_row][to_col]=board[from_row][from_col];
         board[from_row][from_col]=32;
@@ -853,7 +850,6 @@ int main()
                                     int destrow=row(destinaion_string); int destcol=col(destinaion_string);
                                     system("cls");
                                     change_coins(source_row,source_col,destrow,destcol);
-                                    if(board[destrow][destcol]!='k'||board[destrow][destcol]!='K')
                                     push_to_completed(numeric_to_Alphanumeric(source_row,source_col)+"->"+numeric_to_Alphanumeric(destrow,destcol));
                                     
                                         std::cout<<Completed_moves.back()<<std::endl;
