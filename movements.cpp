@@ -681,17 +681,17 @@ void cointype(int row,int col)
 {   
     char coin=board[row][col];
     if(coin=='K' || coin =='k')
-        king(row,col);
+        {std::cout<<"king";(row,col);}
     else if(coin=='Q' || coin =='q')
-        queen(row,col);
+       {std::cout<<"Queen"; queen(row,col);}
     else if(coin=='B' || coin =='b')
-        bishop(row,col);
+        {std::cout<<"Bishop";bishop(row,col);}
     else if(coin=='N' || coin =='n')
-        knight(row,col);
+        {std::cout<<"Knight";knight(row,col);}
     else if(coin=='R' || coin =='r')
-        rook(row,col);
+        {std::cout<<"Rook";rook(row,col);}
     else if(coin=='P' || coin =='p')
-        pawn(row,col);
+        {std::cout<<"Pawn";pawn(row,col);}
     else
         std::cout<<"invalid input"<<board[row][col];
 }
