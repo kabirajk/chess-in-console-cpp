@@ -869,28 +869,5 @@ int main()
                 printboard();
             }
     }
-    
-
-    // printboard();
-    // while(true)
-    // {
-    //     string s;
-    //    std::cout<<"chose the coin";
-    //    std::cin>>s;
-    //    s=Alphanumeric_to_numberstring(s);
-    //    int srow=row(s);
-    //    int scol=col(s);
-    //    cointype(srow,scol);
-    //    std::cout<<"chose destionation";
-    //    printv();
-    //    std::cin>>s;
-    //    if(is_move_avilable(s))
-    //    {
-    //        int drow=row(s),dcol=col(s);
-    //        change_coins(srow,scol,drow,dcol);
-    //        printboard();
-    //    }
-    //    MOVES.clear();
-    // }
 
 }
